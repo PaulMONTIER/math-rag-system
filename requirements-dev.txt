@@ -1,0 +1,67 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# DÉPENDANCES DÉVELOPPEMENT - SYSTÈME RAG HYBRIDE
+# Outils pour développement, tests, et qualité de code
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Inclure les dépendances principales
+-r requirements.txt
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Code Quality - Linting et formatting
+# ───────────────────────────────────────────────────────────────────────────────
+black==24.2.0                 # Formatteur de code Python (PEP 8)
+flake8==7.0.0                 # Linter Python
+pylint==3.0.3                 # Linter avancé
+mypy==1.8.0                   # Type checker statique
+isort==5.13.2                 # Organisation des imports
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Testing - Tests avancés
+# ───────────────────────────────────────────────────────────────────────────────
+pytest-xdist==3.5.0           # Tests parallèles
+pytest-benchmark==4.0.0       # Benchmarking
+pytest-timeout==2.2.0         # Timeout pour tests longs
+hypothesis==6.98.3            # Property-based testing
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Documentation
+# ───────────────────────────────────────────────────────────────────────────────
+sphinx==7.2.6                 # Génération documentation
+sphinx-rtd-theme==2.0.0       # Thème Read the Docs
+sphinx-autodoc-typehints==2.0.0  # Type hints dans docs
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Notebooks - Jupyter pour expérimentation
+# ───────────────────────────────────────────────────────────────────────────────
+jupyter==1.0.0                # Jupyter notebook
+jupyterlab==4.1.2             # JupyterLab (interface améliorée)
+ipywidgets==8.1.2             # Widgets interactifs
+nbconvert==7.16.1             # Conversion notebooks
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Debugging et profiling
+# ───────────────────────────────────────────────────────────────────────────────
+ipdb==0.13.13                 # Debugger interactif amélioré
+memory-profiler==0.61.0       # Profiling mémoire
+line-profiler==4.1.2          # Profiling ligne par ligne
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Pre-commit hooks
+# ───────────────────────────────────────────────────────────────────────────────
+pre-commit==3.6.2             # Hooks pre-commit
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# INSTALLATION:
+#   pip install -r requirements-dev.txt
+#
+# USAGE:
+#   black src/                  # Formatter le code
+#   flake8 src/                 # Linter
+#   mypy src/                   # Type checking
+#   pytest tests/ -v            # Tests
+#   jupyter lab                 # Lancer JupyterLab
+#
+# PRE-COMMIT:
+#   pre-commit install          # Installer hooks
+#   pre-commit run --all-files  # Run sur tous les fichiers
+# ═══════════════════════════════════════════════════════════════════════════════

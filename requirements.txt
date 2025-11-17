@@ -1,0 +1,215 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# DÉPENDANCES - SYSTÈME RAG HYBRIDE
+# Système de questions-réponses sur documents PDF mathématiques
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Core - Configuration et utilitaires de base
+# ───────────────────────────────────────────────────────────────────────────────
+python-dotenv==1.0.1          # Variables d'environnement depuis .env
+pyyaml==6.0.1                 # Parsing config.yaml
+pydantic==2.5.3               # Validation de données typées
+python-dateutil==2.8.2        # Manipulation de dates
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Google Drive API - Téléchargement de PDFs
+# ───────────────────────────────────────────────────────────────────────────────
+google-auth==2.26.2           # Authentification Google
+google-auth-oauthlib==1.2.0   # OAuth2 flow pour authentification interactive
+google-auth-httplib2==0.2.0   # Transport HTTP pour Google Auth
+google-api-python-client==2.112.0  # Client API Google Drive
+
+# ───────────────────────────────────────────────────────────────────────────────
+# PDF Extraction - Extraction de texte et formules LaTeX
+# ───────────────────────────────────────────────────────────────────────────────
+# PyMuPDF (fitz) - Bibliothèque principale (recommandée)
+# Avantages: Rapide, bonne préservation LaTeX, léger
+PyMuPDF==1.23.21              # Extraction PDF avec préservation LaTeX
+pymupdf4llm==0.0.10           # Adapteur PyMuPDF optimisé pour LLM
+
+# Alternative: pdfplumber (décommenter si nécessaire)
+# pdfplumber==0.10.4          # Extraction structurée (meilleur pour tables)
+
+# Support LaTeX
+latex2mathml==3.77.0          # Conversion LaTeX vers MathML (pour affichage web)
+
+# OCR (optionnel - pour PDFs scannés)
+# pytesseract==0.3.10         # Wrapper Python pour Tesseract OCR
+# Pillow==10.2.0              # Manipulation d'images
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Embeddings & Vector Store - Modèles ouverts et base vectorielle
+# ───────────────────────────────────────────────────────────────────────────────
+# Sentence Transformers - Embeddings (MODÈLE OUVERT)
+sentence-transformers==2.3.1  # Modèles d'embeddings pré-entraînés
+transformers==4.37.2          # Bibliothèque de base Hugging Face
+torch==2.2.0                  # PyTorch (backend pour transformers)
+# Pour Apple Silicon (MPS):
+# torch==2.2.0 --index-url https://download.pytorch.org/whl/cpu
+
+# FAISS - Base vectorielle (MODÈLE OUVERT)
+faiss-cpu==1.7.4              # FAISS pour CPU (recherche vectorielle rapide)
+# faiss-gpu==1.7.4            # FAISS pour GPU (si CUDA disponible)
+
+# Alternative: ChromaDB (décommenter si préféré)
+# chromadb==0.4.22            # Base vectorielle avec support métadonnées
+# hnswlib==0.8.0              # Alternative rapide à FAISS
+
+# ───────────────────────────────────────────────────────────────────────────────
+# LLM APIs - Modèles fermés pour génération
+# ───────────────────────────────────────────────────────────────────────────────
+# Anthropic Claude (MODÈLE FERMÉ - recommandé pour math)
+anthropic==0.18.1             # Client API Anthropic Claude
+
+# OpenAI GPT (MODÈLE FERMÉ - alternative)
+openai==1.12.0                # Client API OpenAI GPT
+
+# Optionnel: Ollama (modèles locaux)
+# ollama==0.1.6               # Client Ollama pour modèles locaux (Mistral, Llama)
+
+# ───────────────────────────────────────────────────────────────────────────────
+# LangChain & LangGraph - Orchestration et workflow
+# ───────────────────────────────────────────────────────────────────────────────
+langchain==0.1.9              # Framework LLM et RAG
+langchain-anthropic==0.1.5    # Intégration Claude pour LangChain
+langchain-openai==0.0.5       # Intégration OpenAI pour LangChain
+langchain-community==0.0.20   # Composants communautaires LangChain
+langgraph==0.0.32             # Workflow multi-agent avec graphes
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Interface Web - Streamlit (framework choisi)
+# ───────────────────────────────────────────────────────────────────────────────
+streamlit==1.31.1             # Framework interface web (CHOIX PRINCIPAL)
+streamlit-extras==0.3.6       # Composants additionnels Streamlit
+
+# Alternative: Flask (décommenter si vous préférez)
+# flask==3.0.2                # Framework web minimaliste
+# flask-cors==4.0.0           # Support CORS pour Flask
+# flask-socketio==5.3.6       # WebSocket pour temps réel
+
+# Alternative: Gradio (décommenter si vous préférez)
+# gradio==4.19.1              # Interface ML rapide et simple
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Visualisation et graphiques
+# ───────────────────────────────────────────────────────────────────────────────
+plotly==5.19.0                # Graphiques interactifs
+altair==5.2.0                 # Graphiques déclaratifs (natif Streamlit)
+matplotlib==3.8.3             # Graphiques statiques (backup)
+
+# Visualisation workflow
+graphviz==0.20.1              # Génération de graphes (workflow)
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Data Processing - Manipulation de données
+# ───────────────────────────────────────────────────────────────────────────────
+numpy==1.26.4                 # Calcul numérique
+pandas==2.2.1                 # Manipulation de DataFrames
+scipy==1.12.0                 # Calcul scientifique
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Web Search - Recherche web externe
+# ───────────────────────────────────────────────────────────────────────────────
+duckduckgo-search>=4.0.0      # Recherche web DuckDuckGo (gratuit, pas de clé API)
+# tavily-python>=0.2.0        # Alternative: Tavily (meilleure qualité, clé API nécessaire)
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Utilities - Outils divers
+# ───────────────────────────────────────────────────────────────────────────────
+tqdm==4.66.2                  # Barres de progression
+requests==2.31.0              # Requêtes HTTP
+httpx==0.26.0                 # Client HTTP async (pour APIs)
+aiohttp==3.9.3                # HTTP async (alternatif)
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Logging et monitoring
+# ───────────────────────────────────────────────────────────────────────────────
+colorlog==6.8.2               # Logs colorés dans console
+loguru==0.7.2                 # Alternative logger (optionnel)
+
+# Langfuse - Observabilité LLM (optionnel)
+langfuse==2.22.0              # Monitoring et tracing LLM
+
+# Sentry - Monitoring erreurs (optionnel)
+# sentry-sdk==1.40.5          # Tracking d'erreurs en production
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Text Processing - Traitement de texte
+# ───────────────────────────────────────────────────────────────────────────────
+nltk==3.8.1                   # Natural Language Toolkit
+spacy==3.7.4                  # NLP avancé (optionnel)
+# python -m spacy download fr_core_news_sm  # Modèle français
+
+# Tokenization précise (optionnel)
+tiktoken==0.6.0               # Tokenizer OpenAI (compte tokens précis)
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Database (optionnel) - Persistance
+# ───────────────────────────────────────────────────────────────────────────────
+# sqlalchemy==2.0.27          # ORM pour SQL
+# sqlite3 est inclus dans Python standard library
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Testing - Tests et qualité de code
+# ───────────────────────────────────────────────────────────────────────────────
+pytest==8.0.1                 # Framework de tests
+pytest-cov==4.1.0             # Coverage des tests
+pytest-mock==3.12.0           # Mocking pour tests
+pytest-asyncio==0.23.5        # Tests async
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Development - Outils de développement
+# ───────────────────────────────────────────────────────────────────────────────
+# (voir requirements-dev.txt pour outils de dev)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# NOTES D'INSTALLATION
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# INSTALLATION STANDARD:
+#   pip install -r requirements.txt
+#
+# INSTALLATION AVEC VIRTUALENV (recommandé):
+#   python -m venv venv
+#   source venv/bin/activate  # Linux/Mac
+#   venv\Scripts\activate     # Windows
+#   pip install -r requirements.txt
+#
+# GPU (CUDA):
+#   - Remplacer faiss-cpu par faiss-gpu
+#   - Installer PyTorch avec CUDA:
+#     pip install torch --index-url https://download.pytorch.org/whl/cu118
+#
+# APPLE SILICON (M1/M2/M3):
+#   - PyTorch avec MPS est déjà supporté dans torch>=2.0
+#   - Pas besoin d'installation spéciale
+#
+# TESSERACT OCR (si OCR activé):
+#   - Mac: brew install tesseract
+#   - Ubuntu: sudo apt-get install tesseract-ocr
+#   - Windows: télécharger depuis GitHub
+#
+# GRAPHVIZ (pour visualisation workflow):
+#   - Mac: brew install graphviz
+#   - Ubuntu: sudo apt-get install graphviz
+#   - Windows: télécharger depuis graphviz.org
+#
+# MODÈLES NLP (si spaCy utilisé):
+#   python -m spacy download fr_core_news_sm
+#   python -m spacy download en_core_web_sm
+#
+# TAILLE TOTALE:
+#   - Installation minimale: ~2GB
+#   - Avec modèles embeddings: ~2.5GB
+#   - Avec GPU support: ~3GB
+#
+# COMPATIBILITÉ:
+#   - Python: 3.10+
+#   - OS: Linux, macOS, Windows
+#   - RAM: 8GB minimum, 16GB recommandé
+#
+# DÉPENDANCES SYSTÈME:
+#   - git (pour installation depuis GitHub)
+#   - build-essential (Linux) ou Xcode (Mac) pour compilation
+#
+# ═══════════════════════════════════════════════════════════════════════════════

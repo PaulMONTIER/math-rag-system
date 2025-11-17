@@ -1,0 +1,314 @@
+{
+  "description": "Questions de test pour valider le système RAG mathématique",
+  "version": "1.0",
+  "categories": {
+    "analyse": "Analyse mathématique (limites, dérivées, intégrales)",
+    "algebre": "Algèbre linéaire (vecteurs, matrices, espaces)",
+    "geometrie": "Géométrie (euclidienne, analytique)",
+    "probabilites": "Probabilités et statistiques",
+    "topologie": "Topologie et espaces métriques"
+  },
+  "test_questions": [
+    {
+      "id": 1,
+      "question": "Qu'est-ce qu'une dérivée ?",
+      "level": "L1",
+      "category": "analyse",
+      "expected_topics": [
+        "définition de la dérivée",
+        "taux de variation",
+        "limite du taux d'accroissement",
+        "formule f'(x) = lim"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Question de base, doit retourner définition formelle avec formule LaTeX"
+    },
+    {
+      "id": 2,
+      "question": "Comment calculer la dérivée de x^n ?",
+      "level": "L1",
+      "category": "analyse",
+      "expected_topics": [
+        "règle de puissance",
+        "formule (x^n)' = n*x^(n-1)",
+        "exemples"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Doit citer la règle de puissance avec formule LaTeX"
+    },
+    {
+      "id": 3,
+      "question": "Qu'est-ce qu'une intégrale définie ?",
+      "level": "L2",
+      "category": "analyse",
+      "expected_topics": [
+        "définition de l'intégrale",
+        "aire sous la courbe",
+        "somme de Riemann",
+        "notation ∫"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Doit expliquer concept géométrique et définition formelle"
+    },
+    {
+      "id": 4,
+      "question": "Quelle est la formule de l'intégration par parties ?",
+      "level": "L2",
+      "category": "analyse",
+      "expected_topics": [
+        "formule ∫u dv = uv - ∫v du",
+        "choix de u et dv",
+        "exemples d'application"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Question précise sur une formule, doit la citer exactement"
+    },
+    {
+      "id": 5,
+      "question": "Qu'est-ce qu'un espace vectoriel ?",
+      "level": "L2",
+      "category": "algebre",
+      "expected_topics": [
+        "définition axiomatique",
+        "opérations (addition, multiplication scalaire)",
+        "axiomes (associativité, commutativité, etc.)",
+        "exemples (R^n, polynômes)"
+      ],
+      "should_contain_formulas": false,
+      "notes": "Définition abstraite, peut contenir ou non des formules"
+    },
+    {
+      "id": 6,
+      "question": "Comment calculer le déterminant d'une matrice 2x2 ?",
+      "level": "L1",
+      "category": "algebre",
+      "expected_topics": [
+        "formule det = ad - bc",
+        "matrice [[a,b],[c,d]]",
+        "exemples numériques"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Formule simple, doit être citée avec notation matricielle"
+    },
+    {
+      "id": 7,
+      "question": "Qu'est-ce qu'une base d'un espace vectoriel ?",
+      "level": "L2",
+      "category": "algebre",
+      "expected_topics": [
+        "famille libre",
+        "famille génératrice",
+        "dimension",
+        "exemples"
+      ],
+      "should_contain_formulas": false,
+      "notes": "Concept fondamental, doit relier libre et génératrice"
+    },
+    {
+      "id": 8,
+      "question": "Énoncé du théorème de Pythagore",
+      "level": "L1",
+      "category": "geometrie",
+      "expected_topics": [
+        "triangle rectangle",
+        "hypoténuse",
+        "formule a² + b² = c²",
+        "démonstration ou preuve"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Théorème classique, formule doit apparaître"
+    },
+    {
+      "id": 9,
+      "question": "Qu'est-ce qu'une limite en mathématiques ?",
+      "level": "L1",
+      "category": "analyse",
+      "expected_topics": [
+        "définition intuitive",
+        "définition epsilon-delta",
+        "notation lim",
+        "exemples"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Concept fondamental, doit avoir définition formelle avec ε et δ"
+    },
+    {
+      "id": 10,
+      "question": "Comment démontrer qu'une fonction est continue ?",
+      "level": "L2",
+      "category": "analyse",
+      "expected_topics": [
+        "définition de continuité",
+        "lim f(x) = f(a)",
+        "critères de continuité",
+        "exemples"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Doit expliquer critère avec limite"
+    },
+    {
+      "id": 11,
+      "question": "Qu'est-ce qu'une série convergente ?",
+      "level": "L3",
+      "category": "analyse",
+      "expected_topics": [
+        "définition de série",
+        "somme partielle",
+        "limite de somme",
+        "critères de convergence"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Concept L3, définition formelle attendue"
+    },
+    {
+      "id": 12,
+      "question": "Quelle est la formule de Taylor pour une fonction ?",
+      "level": "L3",
+      "category": "analyse",
+      "expected_topics": [
+        "développement de Taylor",
+        "formule avec dérivées",
+        "reste",
+        "exemples (exp, sin, cos)"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Formule complexe, doit être citée avec notation Σ"
+    },
+    {
+      "id": 13,
+      "question": "Qu'est-ce qu'un produit scalaire ?",
+      "level": "L2",
+      "category": "algebre",
+      "expected_topics": [
+        "définition bilinéaire",
+        "propriétés (symétrie, positivité)",
+        "notation <u,v> ou u·v",
+        "exemples dans R^n"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Définition abstraite + formule concrète dans R^n"
+    },
+    {
+      "id": 14,
+      "question": "Comment calculer des valeurs propres d'une matrice ?",
+      "level": "L3",
+      "category": "algebre",
+      "expected_topics": [
+        "équation caractéristique",
+        "det(A - λI) = 0",
+        "polynôme caractéristique",
+        "méthode de calcul"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Question technique, formule det(A - λI) = 0 doit apparaître"
+    },
+    {
+      "id": 15,
+      "question": "Qu'est-ce qu'une variable aléatoire ?",
+      "level": "L2",
+      "category": "probabilites",
+      "expected_topics": [
+        "définition",
+        "espace de probabilité",
+        "loi de probabilité",
+        "espérance et variance"
+      ],
+      "should_contain_formulas": false,
+      "notes": "Concept probabiliste, peut contenir formules E[X] et Var(X)"
+    },
+    {
+      "id": 16,
+      "question": "Quelle est la formule de l'espérance d'une variable aléatoire discrète ?",
+      "level": "L2",
+      "category": "probabilites",
+      "expected_topics": [
+        "formule E[X] = Σ x*P(X=x)",
+        "cas discret",
+        "exemples"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Formule précise attendue avec notation Σ"
+    },
+    {
+      "id": 17,
+      "question": "Qu'est-ce qu'un espace métrique ?",
+      "level": "M1",
+      "category": "topologie",
+      "expected_topics": [
+        "définition",
+        "fonction distance",
+        "axiomes de la métrique",
+        "exemples"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Concept M1, définition axiomatique attendue"
+    },
+    {
+      "id": 18,
+      "question": "Qu'est-ce que le théorème des valeurs intermédiaires ?",
+      "level": "L2",
+      "category": "analyse",
+      "expected_topics": [
+        "énoncé du théorème",
+        "fonction continue",
+        "intervalle [a,b]",
+        "existence de c tel que f(c) = k"
+      ],
+      "should_contain_formulas": false,
+      "notes": "Théorème important, énoncé doit être précis"
+    },
+    {
+      "id": 19,
+      "question": "Comment résoudre une équation différentielle du premier ordre ?",
+      "level": "L3",
+      "category": "analyse",
+      "expected_topics": [
+        "méthodes de résolution",
+        "équations à variables séparables",
+        "équations linéaires",
+        "exemples"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Question méthodologique, exemples de résolution attendus"
+    },
+    {
+      "id": 20,
+      "question": "Qu'est-ce que la règle de l'Hôpital ?",
+      "level": "L2",
+      "category": "analyse",
+      "expected_topics": [
+        "formes indéterminées 0/0 ou ∞/∞",
+        "formule lim f/g = lim f'/g'",
+        "conditions d'application",
+        "exemples"
+      ],
+      "should_contain_formulas": true,
+      "notes": "Règle pratique, formule doit apparaître"
+    }
+  ],
+  "validation_criteria": {
+    "response_quality": {
+      "min_length": 50,
+      "max_length": 2000,
+      "should_cite_sources": true,
+      "should_preserve_latex": true
+    },
+    "retrieval_quality": {
+      "min_docs_retrieved": 1,
+      "min_similarity_score": 0.3,
+      "relevant_docs_threshold": 0.5
+    },
+    "generation_quality": {
+      "confidence_threshold": 0.75,
+      "no_hallucination": true,
+      "pedagogical_level_appropriate": true
+    }
+  },
+  "usage_notes": [
+    "Ces questions couvrent L1 à M1",
+    "Testent différents aspects : définitions, formules, théorèmes, méthodes",
+    "should_contain_formulas indique si LaTeX attendu dans réponse",
+    "expected_topics servent de checklist pour validation manuelle",
+    "Ajouter vos propres questions selon vos PDFs"
+  ]
+}

@@ -1,0 +1,31 @@
+# Configuration Streamlit - Charte graphique ChatGPT/Notion
+# ══════════════════════════════════════════════════════════════
+
+[theme]
+# Thème de base (IMPORTANT: forcer "light" pour éviter dark mode)
+base = "light"
+
+# Couleurs personnalisées (palette ChatGPT/Notion)
+primaryColor = "#10a37f"        # Vert ChatGPT (boutons, accents)
+backgroundColor = "#f7f7f8"     # Gris très clair (fond principal)
+secondaryBackgroundColor = "#ffffff"  # Blanc pur (cartes, sidebar)
+textColor = "#2d333a"           # Gris foncé (texte principal)
+
+# Police
+font = "sans serif"
+
+[browser]
+# Désactiver la collecte de stats
+gatherUsageStats = false
+
+[server]
+# Port et headless mode
+port = 8501
+headless = true
+enableCORS = true
+enableXsrfProtection = true
+
+[runner]
+# Performance
+magicEnabled = true
+fastReruns = true

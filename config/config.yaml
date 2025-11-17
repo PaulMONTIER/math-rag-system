@@ -1,0 +1,482 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURATION COMPLÈTE SYSTÈME RAG HYBRIDE
+# Système de questions-réponses sur documents PDF mathématiques
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Google Drive Configuration
+# Configuration pour l'extraction automatique des PDFs depuis Google Drive
+google_drive:
+  # ID du dossier Google Drive contenant les PDFs
+  # Pour trouver l'ID: ouvrez le dossier dans Drive, l'ID est dans l'URL
+  # Exemple: https://drive.google.com/drive/folders/1V0C3tUWpIHGFhcJ1sNhhubJlSw_IkMej
+  folder_id: "1V0C3tUWpIHGFhcJ1sNhhubJlSw_IkMej"
+
+  # Fichier credentials Google Drive API
+  # null = utilise OAuth2 (interactive)
+  # "path/to/service-account.json" = utilise Service Account (production)
+  service_account_file: null
+
+  # Répertoire de téléchargement des PDFs
+  download_path: "data/raw/"
+
+  # Vérifier automatiquement les nouveaux documents
+  auto_update: true
+
+  # Intervalle de vérification (heures)
+  update_interval_hours: 24
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Extraction PDF
+# Configuration pour l'extraction de texte et formules LaTeX
+# ───────────────────────────────────────────────────────────────────────────────
+pdf_extraction:
+  # Bibliothèque d'extraction
+  # Options: "pymupdf" (recommandé), "pdfplumber"
+  # pymupdf (PyMuPDF/fitz): Meilleure préservation LaTeX, plus rapide
+  # pdfplumber: Meilleure extraction de tables, plus lent
+  library: "pymupdf"
+
+  # Préserver les formules LaTeX exactement
+  preserve_latex: true
+
+  # Extraire les images/diagrammes (optionnel, augmente la taille)
+  extract_images: false
+
+  # Activer OCR pour PDFs scannés (nécessite tesseract)
+  ocr_enabled: false
+
+  # Langues pour OCR
+  languages: ["fra", "eng"]
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Chunking (Découpage intelligent)
+# Configuration pour le découpage du texte en morceaux
+# ───────────────────────────────────────────────────────────────────────────────
+chunking:
+  # Taille des chunks en tokens
+  # 512 = bon équilibre contexte/précision pour math
+  # Augmenter si formules très longues, diminuer si recherche doit être précise
+  chunk_size: 512
+
+  # Overlap entre chunks (tokens)
+  # 50 = ~10% overlap, évite de perdre du contexte aux frontières
+  chunk_overlap: 50
+
+  # Ne JAMAIS couper une formule mathématique
+  # Crucial pour préserver l'intégrité des équations
+  respect_formula_boundaries: true
+
+  # Respecter les limites de phrases
+  # Évite de couper au milieu d'une phrase
+  respect_sentence_boundaries: true
+
+  # Taille minimum d'un chunk (tokens)
+  # Évite les chunks trop petits et peu informatifs
+  min_chunk_size: 100
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Embeddings (Modèle OUVERT)
+# Configuration du modèle de vectorisation
+# ───────────────────────────────────────────────────────────────────────────────
+embeddings:
+  # Modèle sentence-transformers
+  # Options recommandées:
+  #   - "sentence-transformers/all-MiniLM-L6-v2" (défaut, 384 dim, rapide, 80MB)
+  #   - "intfloat/e5-large-v2" (meilleur qualité, 1024 dim, lent, 1.2GB)
+  #   - "BAAI/bge-large-en-v1.5" (state-of-the-art, 1024 dim, 1.3GB)
+  #   - "sentence-transformers/paraphrase-multilingual-mpnet-base-v2" (multilingue, 768 dim, 1GB)
+  #
+  # JUSTIFICATION du choix par défaut:
+  # all-MiniLM-L6-v2 est un excellent compromis:
+  #   - Léger (80MB) = chargement rapide, faible RAM
+  #   - Rapide (384 dimensions = recherche rapide)
+  #   - Bonne qualité pour la plupart des cas
+  #   - Bien testé et robuste
+  model: "sentence-transformers/all-MiniLM-L6-v2"
+
+  # Taille des batches pour l'embedding (pour performance)
+  batch_size: 32
+
+  # Device: "cpu", "cuda", "mps" (Apple Silicon)
+  # Auto-détection si "auto"
+  device: "auto"
+
+  # Cache des embeddings pour éviter recalcul
+  cache_embeddings: true
+  cache_path: "data/embeddings_cache/"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Vector Store (Base vectorielle)
+# Configuration FAISS ou alternative
+# ───────────────────────────────────────────────────────────────────────────────
+vector_store:
+  # Type de base vectorielle
+  # Options: "faiss" (recommandé), "chromadb", "qdrant"
+  # FAISS: Rapide, mature, pas de serveur
+  # ChromaDB: Plus simple pour métadonnées, nécessite serveur
+  # Qdrant: Moderne, production-ready, nécessite serveur
+  type: "faiss"
+
+  # Type d'index FAISS
+  # Options:
+  #   - "IndexFlatL2": Recherche exacte, pour <1M vecteurs (recommandé pour début)
+  #   - "IndexIVFFlat": Recherche approximative, pour >1M vecteurs
+  #   - "IndexHNSWFlat": Graph-based, très rapide, plus de RAM
+  index_type: "IndexFlatL2"
+
+  # Chemin de persistance de l'index
+  persist_path: "data/vector_store/"
+
+  # Métrique de similarité
+  # Options: "cosine" (recommandé), "l2", "inner_product"
+  # Cosine = insensible à la magnitude, meilleur pour texte
+  similarity_metric: "cosine"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Retrieval (Recherche RAG)
+# Configuration de la récupération de documents
+# ───────────────────────────────────────────────────────────────────────────────
+retrieval:
+  # Nombre de chunks à récupérer
+  # 5 = bon équilibre qualité/contexte
+  # Augmenter si questions complexes, diminuer si réponses trop génériques
+  top_k: 5
+
+  # Seuil de similarité minimum (0-1)
+  # 0.4 = adapté pour modèle anglais sur documents français
+  # Augmenter à 0.6-0.7 si vous utilisez un modèle multilingue
+  similarity_threshold: 0.4
+
+  # Re-ranking avec cross-encoder (optionnel, plus lent mais meilleur)
+  # Améliore l'ordre des résultats mais ajoute ~200ms
+  use_reranking: false
+
+  # Modèle de re-ranking (si use_reranking=true)
+  reranking_model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+
+  # Nombre de tokens maximum pour le contexte envoyé au LLM
+  # 3000 tokens ~= 2-3 chunks complets
+  # Claude Sonnet 4: max 200k tokens (on peut augmenter)
+  # GPT-4o: max 128k tokens
+  max_context_tokens: 3000
+
+# ───────────────────────────────────────────────────────────────────────────────
+# LLM (Modèle FERMÉ - Génération)
+# Configuration du modèle de langage pour génération de réponses
+# ───────────────────────────────────────────────────────────────────────────────
+llm:
+  # Provider de LLM
+  # Options: "anthropic" (Claude), "openai" (GPT), "local" (Ollama)
+  #
+  # JUSTIFICATION: Anthropic Claude recommandé car:
+  #   - Excellent pour raisonnement mathématique
+  #   - Meilleure préservation du format LaTeX
+  #   - Contexte 200k tokens (vs 128k GPT)
+  #   - Moins d'hallucinations sur contenu technique
+  #   - Prix compétitif (~$0.003/1k input, $0.015/1k output)
+  provider: "openai"  # Changé car vous avez fourni une clé OpenAI
+
+  # Modèle spécifique
+  # Anthropic: "claude-sonnet-4", "claude-opus-4" (meilleur mais cher)
+  # OpenAI: "gpt-4o", "gpt-4o-mini" (moins cher)
+  # Local: "mistral:7b", "llama3:70b"
+  model: "gpt-4o"
+
+  # Température (0-1)
+  # 0.3 = reproductible, factuel (recommandé pour math)
+  # 0.7 = plus créatif (pour explications pédagogiques)
+  temperature: 0.3
+
+  # Tokens maximum pour la réponse
+  max_tokens: 1500
+
+  # Top-p (nucleus sampling)
+  top_p: 0.9
+
+  # Timeout API (secondes) - 120s pour modèles locaux lents sur CPU
+  timeout: 120
+
+  # Nombre de tentatives en cas d'échec
+  retry_attempts: 3
+
+  # Fallback vers modèle local si API down
+  fallback_to_local: false
+
+  # Modèle de fallback (Ollama)
+  fallback_model: "mistral"
+
+  # URL Ollama (si local)
+  ollama_base_url: "http://localhost:11434"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Agents (Configuration des agents du workflow)
+# ───────────────────────────────────────────────────────────────────────────────
+agents:
+  # Agent Classifier: Détection de l'intention
+  classifier:
+    enabled: true
+
+    # Seuil de confiance pour classification
+    # Si < seuil, demander clarification
+    confidence_threshold: 0.8
+
+    # Utiliser LLM ou modèle classification léger
+    # Options: "llm" (meilleur mais coûteux), "local" (DistilBERT)
+    method: "llm"
+
+  # Agent Retriever: Recherche vectorielle
+  retriever:
+    enabled: true
+
+  # Agent Generator: Génération de réponse
+  generator:
+    enabled: true
+
+    # Template de prompt système (fichier ou inline)
+    system_prompt_template: |
+      Tu es un assistant pédagogique spécialisé en mathématiques pour étudiants de niveau {level}.
+      Réponds de manière claire, structurée et pédagogique.
+
+      RÈGLES IMPORTANTES:
+      - Utilise UNIQUEMENT le contexte fourni pour répondre
+      - Cite TOUJOURS tes sources avec format: [Source: NomPDF.pdf, page X]
+      - Adapte ton niveau de langage au profil étudiant ({level})
+      - Donne des exemples concrets et illustratifs
+      - Préserve les formules LaTeX EXACTEMENT comme fournies
+      - Si tu ne sais pas ou si l'information n'est pas dans le contexte, dis-le clairement
+      - Ne JAMAIS inventer d'informations ou halluciner
+      - Structure ta réponse: définition, explication, exemple si pertinent
+
+  # Agent Verifier: Vérification qualité
+  verifier:
+    enabled: true
+
+    # Vérifier les hallucinations (info non dans sources)
+    hallucination_check: true
+
+    # Vérifier la cohérence mathématique
+    coherence_check: true
+
+    # Vérifier que les sources sont bien citées
+    citation_check: true
+
+    # Seuil de confiance global
+    confidence_threshold: 0.75
+
+  # Agent Validator: Validation humaine
+  validator:
+    enabled: true
+
+    # Seuil de confiance sous lequel déclencher validation humaine
+    # Si score vérification < seuil → demander validation
+    confidence_threshold: 0.75
+
+    # Timeout pour validation humaine (secondes)
+    # Si pas de réponse après timeout, approuver automatiquement
+    timeout_seconds: 60
+
+    # Auto-approve si timeout
+    auto_approve_on_timeout: false
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Workflow (LangGraph)
+# Configuration du workflow multi-agent
+# ───────────────────────────────────────────────────────────────────────────────
+workflow:
+  # Activer logging détaillé du workflow
+  enable_logging: true
+
+  # Niveau de log
+  log_level: "INFO"
+
+  # Visualiser le graphe workflow
+  visualize_graph: true
+
+  # Sauvegarder l'état du workflow (pour replay/debug)
+  save_state: true
+  save_state_path: "data/logs/workflow_states/"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Interface Web
+# Configuration de l'interface Streamlit
+# ───────────────────────────────────────────────────────────────────────────────
+interface:
+  # Framework: "streamlit" (recommandé), "flask", "gradio"
+  #
+  # JUSTIFICATION Streamlit:
+  #   - Développement rapide (moins de code)
+  #   - Composants chat natifs (st.chat_message, st.chat_input)
+  #   - Réactivité temps réel native
+  #   - Pas besoin HTML/CSS/JS
+  #   - Idéal pour MVP et démo
+  #   - LaTeX rendering natif (st.latex)
+  #
+  # Alternative Flask si:
+  #   - Besoin plus de contrôle sur l'UI
+  #   - Déploiement production complexe
+  #   - Intégration avec frontend React/Vue
+  framework: "streamlit"
+
+  # Host
+  host: "localhost"
+
+  # Port
+  # 8501 pour Streamlit (par défaut)
+  # 5000 pour Flask
+  port: 8501
+
+  # Activer panneau métriques
+  enable_metrics: true
+
+  # Activer feedback utilisateur (thumbs up/down)
+  enable_feedback: true
+
+  # Timeout de session (minutes)
+  session_timeout_minutes: 60
+
+  # Thème Streamlit
+  theme:
+    primaryColor: "#1f77b4"
+    backgroundColor: "#ffffff"
+    secondaryBackgroundColor: "#f0f2f6"
+    textColor: "#262730"
+    font: "sans serif"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Coûts et Limites
+# Tracking et limitation des coûts API
+# ───────────────────────────────────────────────────────────────────────────────
+costs:
+  # Activer tracking des coûts
+  track_costs: true
+
+  # Coût maximum par session (USD)
+  max_cost_per_session: 1.0
+
+  # Seuil d'alerte (USD)
+  alert_threshold: 0.5
+
+  # Prix par modèle (USD par 1000 tokens)
+  # Mis à jour régulièrement selon les prix des providers
+  pricing:
+    # Anthropic Claude (janvier 2025)
+    claude-sonnet-4:
+      input_per_1k: 0.003
+      output_per_1k: 0.015
+    claude-opus-4:
+      input_per_1k: 0.015
+      output_per_1k: 0.075
+
+    # OpenAI GPT (janvier 2025)
+    gpt-4o:
+      input_per_1k: 0.005
+      output_per_1k: 0.015
+    gpt-4o-mini:
+      input_per_1k: 0.00015
+      output_per_1k: 0.0006
+
+    # Modèles locaux = gratuit
+    mistral:7b:
+      input_per_1k: 0.0
+      output_per_1k: 0.0
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Logging
+# Configuration des logs système
+# ───────────────────────────────────────────────────────────────────────────────
+logging:
+  # Niveau de log global
+  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+
+  # Afficher logs dans console
+  console: true
+
+  # Enregistrer logs dans fichier
+  file: true
+
+  # Chemin du fichier de log
+  file_path: "data/logs/app.log"
+
+  # Rotation des fichiers
+  # Options: "daily", "weekly", "size"
+  rotation: "daily"
+
+  # Rétention des logs (jours)
+  retention_days: 30
+
+  # Format: "json" (structuré), "text" (lisible)
+  format: "json"
+
+  # Logs spécifiques par module
+  modules:
+    extraction: "INFO"
+    vectorization: "INFO"
+    agents: "INFO"
+    workflow: "DEBUG"  # Plus de détails pour workflow
+    interface: "INFO"
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Tests
+# Configuration pour tests et benchmarks
+# ───────────────────────────────────────────────────────────────────────────────
+testing:
+  # Fichier de questions de test
+  test_questions_file: "tests/test_questions.json"
+
+  # Exécuter benchmarks de performance
+  run_benchmarks: true
+
+  # Comparer différents modèles
+  compare_models: true
+
+  # Modèles à comparer
+  models_to_compare:
+    - "gpt-4o"
+    - "gpt-4o-mini"
+    # - "claude-sonnet-4"  # Si vous avez une clé Anthropic
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Pédagogie
+# Configuration spécifique aux aspects pédagogiques
+# ───────────────────────────────────────────────────────────────────────────────
+pedagogy:
+  # Niveaux d'étudiants supportés
+  student_levels:
+    - "L1"  # Licence 1ère année
+    - "L2"  # Licence 2ème année
+    - "L3"  # Licence 3ème année
+    - "M1"  # Master 1ère année
+    - "M2"  # Master 2ème année
+
+  # Adapter le niveau de réponse au profil
+  adapt_response_level: true
+
+  # Fournir des exemples concrets
+  provide_examples: true
+
+  # Toujours citer les sources
+  cite_sources: true
+
+  # Suggérer des prérequis si question trop avancée
+  suggest_prerequisites: true
+
+  # Proposer des exercices supplémentaires
+  suggest_exercises: false
+
+# ───────────────────────────────────────────────────────────────────────────────
+# Monitoring (optionnel)
+# Configuration Langfuse pour monitoring en production
+# ───────────────────────────────────────────────────────────────────────────────
+monitoring:
+  # Activer monitoring Langfuse
+  enabled: true
+
+  # Les clés sont dans .env pour sécurité
+  # LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, LANGFUSE_BASE_URL
+
+  # Tracer toutes les requêtes
+  trace_all: true
+
+  # Tracer les erreurs uniquement
+  trace_errors_only: false
