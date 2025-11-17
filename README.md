@@ -19,7 +19,7 @@ MathRAG est un système de question-réponse intelligent conçu pour répondre �
 
 Le système décide automatiquement de la meilleure stratégie (RAG local, web search, ou hybride) en fonction de la question posée.
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
 ### Intelligence Multi-Agent
 
@@ -50,7 +50,7 @@ Le système décide automatiquement de la meilleure stratégie (RAG local, web s
 - **Suggestions de questions** de suivi intelligentes
 - **Historique** des conversations
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -83,7 +83,7 @@ Le système décide automatiquement de la meilleure stratégie (RAG local, web s
    └─────────┘    └──────────┘   └──────────┘
 ```
 
-## 🚀 Technologies
+## Technologies
 
 - **Python 3.11+** : Langage principal
 - **LangGraph** : Orchestration du workflow multi-agent
@@ -95,7 +95,7 @@ Le système décide automatiquement de la meilleure stratégie (RAG local, web s
 - **OpenAI API** : GPT-4 / GPT-4-turbo (optionnel)
 - **Ollama** : Modèles locaux open-source (optionnel)
 
-## 📋 Prérequis
+## Prérequis
 
 - Python 3.11 ou supérieur
 - pip (gestionnaire de paquets Python)
@@ -103,7 +103,7 @@ Le système décide automatiquement de la meilleure stratégie (RAG local, web s
 - (Optionnel) Clés API OpenAI pour mode cloud
 - (Optionnel) Clés API Langfuse pour observabilité
 
-## 📦 Installation
+## Installation
 
 ### 1. Cloner le Dépôt
 
@@ -171,7 +171,7 @@ Cette étape :
 - Construit l'index FAISS
 - Peut prendre 10-30 minutes selon le nombre de documents
 
-## 🎯 Utilisation
+## Utilisation
 
 ### Lancer l'Interface Web
 
@@ -224,7 +224,7 @@ LLM_MODE=cloud
 OPENAI_API_KEY=your_api_key_here
 ```
 
-## 📁 Structure du Projet
+## Structure du Projet
 
 ```
 math-rag-system/
@@ -267,7 +267,7 @@ math-rag-system/
 
 Voir [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) pour plus de détails.
 
-## 🧪 Tests
+## Tests
 
 ### Tests Unitaires
 
@@ -292,7 +292,7 @@ python tests/test_complete_flow.py
 python tests/run_test_questions.py
 ```
 
-## 📊 Monitoring avec Langfuse
+## Monitoring avec Langfuse
 
 Si Langfuse est configuré, accédez au dashboard :
 
@@ -306,7 +306,7 @@ Le système trace automatiquement :
 - Hiérarchie des appels (workflow → agents → LLM)
 - Scores de qualité et métriques custom
 
-## 📚 Documentation
+## Documentation
 
 - [README.md](README.md) - Ce fichier
 - [QUICKSTART.md](QUICKSTART.md) - Guide de démarrage rapide
@@ -314,7 +314,7 @@ Le système trace automatiquement :
 - [docs/TECHNICAL_DOCUMENTATION.md](docs/TECHNICAL_DOCUMENTATION.md) - Documentation technique détaillée
 - [TESTING.md](TESTING.md) - Guide des tests
 
-## 🛠️ Développement
+## Développement
 
 ### Installation des Dépendances de Développement
 
@@ -355,7 +355,7 @@ rm -rf data/logs/*.log
 python scripts/build_vector_store.py --force
 ```
 
-## 🤝 Contribution
+## Contribution
 
 Les contributions sont les bienvenues ! Voici comment contribuer :
 
@@ -372,7 +372,7 @@ Les contributions sont les bienvenues ! Voici comment contribuer :
 - Mettre à jour la documentation si nécessaire
 - S'assurer que tous les tests passent avant de soumettre
 
-## 🐛 Signaler un Bug
+## Signaler un Bug
 
 Ouvrir une issue sur GitHub avec :
 - Description claire du problème
@@ -381,24 +381,24 @@ Ouvrir une issue sur GitHub avec :
 - Environnement (OS, version Python, etc.)
 - Logs pertinents
 
-## 📝 Changelog
+## Changelog
 
 ### Version 1.0.0 (2024)
 
-- ✨ Workflow multi-agent avec LangGraph
-- ✨ Recherche vectorielle FAISS
-- ✨ Support Ollama (local) et OpenAI (cloud)
-- ✨ Interface Streamlit avec LaTeX
-- ✨ Observabilité Langfuse avec spans manuels
-- ✨ Système de suggestions intelligentes
-- ✨ Recherche web intégrée
-- ✨ Tests unitaires et d'intégration
+- Workflow multi-agent avec LangGraph
+- Recherche vectorielle FAISS
+- Support Ollama (local) et OpenAI (cloud)
+- Interface Streamlit avec LaTeX
+- Observabilité Langfuse avec spans manuels
+- Système de suggestions intelligentes
+- Recherche web intégrée
+- Tests unitaires et d'intégration
 
-## 📄 License
+## License
 
 Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
-## 🙏 Remerciements
+## Remerciements
 
 - [LangGraph](https://github.com/langchain-ai/langgraph) pour l'orchestration multi-agent
 - [FAISS](https://github.com/facebookresearch/faiss) pour la recherche vectorielle
@@ -407,7 +407,7 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 - [Langfuse](https://langfuse.com/) pour l'observabilité LLM
 - [Ollama](https://ollama.ai/) pour les modèles locaux
 
-## 📧 Contact
+## Contact
 
 Paul MONTIER - [@PaulMONTIER](https://github.com/PaulMONTIER)
 
@@ -415,4 +415,4 @@ Lien du projet : [https://github.com/PaulMONTIER/math-rag-system](https://github
 
 ---
 
-⭐ Si ce projet vous est utile, n'hésitez pas à lui donner une étoile !
+Si ce projet vous est utile, n'hésitez pas à lui donner une étoile !
