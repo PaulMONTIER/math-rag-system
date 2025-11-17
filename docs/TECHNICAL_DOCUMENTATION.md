@@ -3103,8 +3103,6 @@ Cette documentation technique couvre l'ensemble du Math RAG System:
 - [TESTING.md](../TESTING.md): Guide de tests
 - [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md): Structure du projet
 
-**Contact**: paul.montier@example.com
-
 ---
 
 **Changelog**:
