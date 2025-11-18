@@ -75,23 +75,11 @@ chunking:
   min_chunk_size: 100
 
 # ───────────────────────────────────────────────────────────────────────────────
-# Embeddings (Modèle OUVERT)
+# Embeddings
 # Configuration du modèle de vectorisation
 # ───────────────────────────────────────────────────────────────────────────────
 embeddings:
-  # Modèle sentence-transformers
-  # Options recommandées:
-  #   - "sentence-transformers/all-MiniLM-L6-v2" (défaut, 384 dim, rapide, 80MB)
-  #   - "intfloat/e5-large-v2" (meilleur qualité, 1024 dim, lent, 1.2GB)
-  #   - "BAAI/bge-large-en-v1.5" (state-of-the-art, 1024 dim, 1.3GB)
-  #   - "sentence-transformers/paraphrase-multilingual-mpnet-base-v2" (multilingue, 768 dim, 1GB)
-  #
-  # JUSTIFICATION du choix par défaut:
-  # all-MiniLM-L6-v2 est un excellent compromis:
-  #   - Léger (80MB) = chargement rapide, faible RAM
-  #   - Rapide (384 dimensions = recherche rapide)
-  #   - Bonne qualité pour la plupart des cas
-  #   - Bien testé et robuste
+  # Modèle sentence-transformers (384 dimensions, 80MB)
   model: "sentence-transformers/all-MiniLM-L6-v2"
 
   # Taille des batches pour l'embedding (pour performance)
@@ -107,21 +95,12 @@ embeddings:
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Vector Store (Base vectorielle)
-# Configuration FAISS ou alternative
 # ───────────────────────────────────────────────────────────────────────────────
 vector_store:
   # Type de base vectorielle
-  # Options: "faiss" (recommandé), "chromadb", "qdrant"
-  # FAISS: Rapide, mature, pas de serveur
-  # ChromaDB: Plus simple pour métadonnées, nécessite serveur
-  # Qdrant: Moderne, production-ready, nécessite serveur
   type: "faiss"
 
-  # Type d'index FAISS
-  # Options:
-  #   - "IndexFlatL2": Recherche exacte, pour <1M vecteurs (recommandé pour début)
-  #   - "IndexIVFFlat": Recherche approximative, pour >1M vecteurs
-  #   - "IndexHNSWFlat": Graph-based, très rapide, plus de RAM
+  # Type d'index FAISS (IndexFlatL2 = recherche exacte)
   index_type: "IndexFlatL2"
 
   # Chemin de persistance de l'index
@@ -156,30 +135,20 @@ retrieval:
 
   # Nombre de tokens maximum pour le contexte envoyé au LLM
   # 3000 tokens ~= 2-3 chunks complets
-  # Claude Sonnet 4: max 200k tokens (on peut augmenter)
   # GPT-4o: max 128k tokens
   max_context_tokens: 3000
 
 # ───────────────────────────────────────────────────────────────────────────────
-# LLM (Modèle FERMÉ - Génération)
-# Configuration du modèle de langage pour génération de réponses
+# LLM - Génération de réponses
 # ───────────────────────────────────────────────────────────────────────────────
 llm:
   # Provider de LLM
-  # Options: "anthropic" (Claude), "openai" (GPT), "local" (Ollama)
-  #
-  # JUSTIFICATION: Anthropic Claude recommandé car:
-  #   - Excellent pour raisonnement mathématique
-  #   - Meilleure préservation du format LaTeX
-  #   - Contexte 200k tokens (vs 128k GPT)
-  #   - Moins d'hallucinations sur contenu technique
-  #   - Prix compétitif (~$0.003/1k input, $0.015/1k output)
-  provider: "openai"  # Changé car vous avez fourni une clé OpenAI
+  # Options: "openai" (GPT cloud), "local" (Ollama avec Mistral)
+  provider: "openai"
 
   # Modèle spécifique
-  # Anthropic: "claude-sonnet-4", "claude-opus-4" (meilleur mais cher)
-  # OpenAI: "gpt-4o", "gpt-4o-mini" (moins cher)
-  # Local: "mistral:7b", "llama3:70b"
+  # OpenAI: "gpt-4o", "gpt-4o-mini"
+  # Local: "mistral"
   model: "gpt-4o"
 
   # Température (0-1)
@@ -298,31 +267,13 @@ workflow:
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Interface Web
-# Configuration de l'interface Streamlit
 # ───────────────────────────────────────────────────────────────────────────────
 interface:
-  # Framework: "streamlit" (recommandé), "flask", "gradio"
-  #
-  # JUSTIFICATION Streamlit:
-  #   - Développement rapide (moins de code)
-  #   - Composants chat natifs (st.chat_message, st.chat_input)
-  #   - Réactivité temps réel native
-  #   - Pas besoin HTML/CSS/JS
-  #   - Idéal pour MVP et démo
-  #   - LaTeX rendering natif (st.latex)
-  #
-  # Alternative Flask si:
-  #   - Besoin plus de contrôle sur l'UI
-  #   - Déploiement production complexe
-  #   - Intégration avec frontend React/Vue
+  # Framework d'interface
   framework: "streamlit"
 
-  # Host
+  # Host et port
   host: "localhost"
-
-  # Port
-  # 8501 pour Streamlit (par défaut)
-  # 5000 pour Flask
   port: 8501
 
   # Activer panneau métriques
@@ -356,27 +307,15 @@ costs:
   # Seuil d'alerte (USD)
   alert_threshold: 0.5
 
-  # Prix par modèle (USD par 1000 tokens)
-  # Mis à jour régulièrement selon les prix des providers
+  # Prix par modèle (USD par 1000 tokens, janvier 2025)
   pricing:
-    # Anthropic Claude (janvier 2025)
-    claude-sonnet-4:
-      input_per_1k: 0.003
-      output_per_1k: 0.015
-    claude-opus-4:
-      input_per_1k: 0.015
-      output_per_1k: 0.075
-
-    # OpenAI GPT (janvier 2025)
     gpt-4o:
       input_per_1k: 0.005
       output_per_1k: 0.015
     gpt-4o-mini:
       input_per_1k: 0.00015
       output_per_1k: 0.0006
-
-    # Modèles locaux = gratuit
-    mistral:7b:
+    mistral:
       input_per_1k: 0.0
       output_per_1k: 0.0
 
@@ -434,7 +373,6 @@ testing:
   models_to_compare:
     - "gpt-4o"
     - "gpt-4o-mini"
-    # - "claude-sonnet-4"  # Si vous avez une clé Anthropic
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Pédagogie
